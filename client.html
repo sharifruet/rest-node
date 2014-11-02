@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.min.js"></script>
+		<style type="text/css">
+			td{text-align:center;background-color:silver;}
+			th{text-align:center;background-color:gray;}
+		</style>
+	</head>
+
+	<body>
+
+		<div ng-app="" ng-controller="personController">
+			<button ng-click="get()">GET</button>
+
+			<table style="min-width:200px;">
+				<tr><th>Name</th><th>Age</th><th>&nbsp;</th></tr>
+				<tr ng-repeat="x in names"><td>{{x.name}}</td><td>{{x.age}}</td><td>&nbsp;</td></tr>
+				<tr><td><input ng-model="name"></td><td><input ng-model="age"></td><td><button ng-click="post()">POST</button></td></tr>
+			</table>
+
+		</div>
+
+		<script>
+			function personController($scope,$http) {
+    			$scope.names = [{"name":"John", "age":"33"}];
+				$scope.name = "";
+				$scope.age = "";
+    			$scope.get = function() {
+        			$http.get("http://localhost:6789/api/persons/")
+    					.success(function(response) {
+    						$scope.names = response;
+    				});
+    			};
+
+    			$scope.post = function() {
+					$http.post("http://localhost:6789/api/persons/", {"name":$scope.name, "age":$scope.age})
+				    	.success(function(response) {
+				    		alert("Save Successfull");
+				    });
+    			};
+			}
+		</script>
+
+	</body>
+</html>
